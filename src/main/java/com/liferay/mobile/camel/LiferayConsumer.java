@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.mobile;
+package com.liferay.mobile.camel;
 
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;

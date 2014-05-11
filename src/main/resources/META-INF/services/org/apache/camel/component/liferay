@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 
-class=com.liferay.mobile.LiferayComponent
+class=com.liferay.mobile.camel.LiferayComponent

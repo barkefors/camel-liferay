@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.mobile;
+package com.liferay.mobile.camel;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
