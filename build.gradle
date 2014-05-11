@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.liferay.mobile'
+version = '1.0-SNAPSHOT'
+
+description = "Liferay Camel Component"
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+	maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+	compile group: 'org.apache.camel', name: 'camel-core', version:'2.9.0'
+	compile group: 'org.slf4j', name: 'slf4j-api', version:'1.6.1'
+	testCompile group: 'org.apache.camel', name: 'camel-test', version:'2.9.0'
+	testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
+	testCompile group: 'log4j', name: 'log4j', version:'1.2.16'
+}
