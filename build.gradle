@@ -3,20 +3,42 @@ apply plugin: 'maven'
 
 group = 'com.liferay.mobile'
 version = '1.0-SNAPSHOT'
-
 description = "Liferay Camel Component"
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
 repositories {
-	maven { url "http://repo.maven.apache.org/maven2" }
+	repositories {
+		mavenCentral()
+	}
+
+	maven {
+		url 'https://repository.liferay.com/nexus/content/groups/liferay-ce'
+	}
+}
+
+configurations {
+	formatter
 }
 
 dependencies {
 	compile group: 'org.apache.camel', name: 'camel-core', version:'2.9.0'
 	compile group: 'org.slf4j', name: 'slf4j-api', version:'1.6.1'
+
+	formatter group: 'com.liferay.portal', name: 'portal-impl', version: '6.2.0-ga1'
+	formatter group: 'com.liferay.portal', name: 'portal-service', version: '6.2.0-ga1'
+	formatter group: 'com.liferay.portal', name: 'util-java', version: '6.2.0-ga1'
+	formatter group: 'dom4j', name: 'dom4j', version: '1.6.1'
+	formatter group: 'org.apache.ant', name: 'ant', version: '1.8.2'
+
 	testCompile group: 'org.apache.camel', name: 'camel-test', version:'2.9.0'
 	testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
 	testCompile group: 'log4j', name: 'log4j', version:'1.2.16'
+}
+
+task format(type: JavaExec) {
+	main = 'com.liferay.portal.tools.sourceformatter.SourceFormatter'
+	classpath = configurations.formatter
+	workingDir = 'src/main/java'
 }
