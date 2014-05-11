@@ -23,6 +23,7 @@ configurations {
 }
 
 dependencies {
+	compile group: 'com.liferay.portal', name: 'portal-service', version: '6.2.0-ga1'
 	compile group: 'org.apache.camel', name: 'camel-core', version:'2.9.0'
 	compile group: 'org.slf4j', name: 'slf4j-api', version:'1.6.1'
 

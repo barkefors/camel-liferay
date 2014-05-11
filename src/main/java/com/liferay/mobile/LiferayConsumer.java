@@ -14,45 +14,73 @@
 
 package com.liferay.mobile;
 
-import java.util.Date;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.messaging.SynchronousDestination;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.ScheduledPollConsumer;
+import org.apache.camel.impl.DefaultConsumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Bruno Farache
  */
-public class LiferayConsumer extends ScheduledPollConsumer {
+public class LiferayConsumer extends DefaultConsumer
+	implements MessageListener {
 
 	public LiferayConsumer(LiferayEndpoint endpoint, Processor processor) {
 		super(endpoint, processor);
+	}
 
-		_endpoint = endpoint;
+	public LiferayEndpoint getEndpoint() {
+		return (LiferayEndpoint)super.getEndpoint();
 	}
 
 	@Override
-	protected int poll() throws Exception {
-		Exchange exchange = _endpoint.createExchange();
+	public void receive(Message message) throws MessageListenerException {
+		Exchange exchange = getEndpoint().createExchange();
+		Object payload = message.getPayload();
 
-		Date now = new Date();
-		exchange.getIn().setBody("Hello World! The time is " + now);
+		if (_log.isDebugEnabled()) {
+			_log.debug("LiferayConsumer.receive " + payload);
+		}
+
+		exchange.getIn().setBody(payload);
 
 		try {
 			getProcessor().process(exchange);
-
-			return 1;
 		}
-		finally {
-			Exception exception = exchange.getException();
-
-			if (exception != null) {
-				getExceptionHandler().handleException(
-					"Error processing exchange", exchange, exception);
-			}
+		catch (Exception e) {
+			_log.error("Error processing message", e);
 		}
 	}
 
-	private LiferayEndpoint _endpoint;
+	@Override
+	protected void doStart() throws Exception {
+		super.doStart();
+
+		LiferayEndpoint endpoint = getEndpoint();
+
+		String destination = endpoint.getDestination();
+		MessageBus messageBus = endpoint.getMessageBus();
+
+		if (!messageBus.hasDestination(destination)) {
+			SynchronousDestination synchronousDestination =
+				new SynchronousDestination();
+
+			synchronousDestination.setName(destination);
+
+			messageBus.addDestination(synchronousDestination);
+		}
+
+		messageBus.registerMessageListener(destination, this);
+	}
+
+	private final Logger _log = LoggerFactory.getLogger(LiferayConsumer.class);
 
 }

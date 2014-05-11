@@ -14,6 +14,8 @@
 
 package com.liferay.mobile;
 
+import com.liferay.portal.kernel.messaging.MessageBus;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -27,24 +29,41 @@ public class LiferayEndpoint extends DefaultEndpoint {
 	public LiferayEndpoint() {
 	}
 
-	public LiferayEndpoint(String endpointUri) {
-		super(endpointUri);
+	public LiferayEndpoint(String uri) {
+		super(uri);
 	}
 
-	public LiferayEndpoint(String uri, LiferayComponent component) {
+	public LiferayEndpoint(
+		String uri, LiferayComponent component, String destination) {
+
 		super(uri, component);
+
+		_destination = destination;
 	}
 
+	@Override
 	public Consumer createConsumer(Processor processor) throws Exception {
 		return new LiferayConsumer(this, processor);
 	}
 
+	@Override
 	public Producer createProducer() throws Exception {
 		return new LiferayProducer(this);
 	}
 
+	public String getDestination() {
+		return _destination;
+	}
+
+	public MessageBus getMessageBus() {
+		return ((LiferayComponent)getComponent()).getMessageBus();
+	}
+
+	@Override
 	public boolean isSingleton() {
 		return true;
 	}
+
+	private String _destination;
 
 }

@@ -27,17 +27,14 @@ public class LiferayProducer extends DefaultProducer {
 
 	public LiferayProducer(LiferayEndpoint endpoint) {
 		super(endpoint);
-
-		_endpoint = endpoint;
 	}
 
 	public void process(Exchange exchange) throws Exception {
-		System.out.println(exchange.getIn().getBody());
+		if (_log.isDebugEnabled()) {
+			_log.debug("LiferayProducer.process " + exchange.getIn().getBody());
+		}
 	}
 
-	private static final transient Logger _LOG = LoggerFactory.getLogger(
-		LiferayProducer.class);
-
-	private LiferayEndpoint _endpoint;
+	private final Logger _log = LoggerFactory.getLogger(LiferayProducer.class);
 
 }

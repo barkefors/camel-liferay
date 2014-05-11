@@ -14,6 +14,10 @@
 
 package com.liferay.mobile;
 
+import com.liferay.portal.kernel.messaging.DefaultMessageBus;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBus;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -26,22 +30,36 @@ import org.junit.Test;
 public class LiferayComponentTest extends CamelTestSupport {
 
 	@Test
-	public void testLiferay() throws Exception {
+	public void sendPayload() throws Exception {
 		MockEndpoint mock = getMockEndpoint("mock:result");
 		mock.expectedMinimumMessageCount(1);
 
+		Message message = new Message();
+		message.setPayload("payload");
+
+		_messageBus.sendMessage("destination", message);
 		assertMockEndpointsSatisfied();
 	}
 
 	@Override
 	protected RouteBuilder createRouteBuilder() throws Exception {
+		_messageBus = new DefaultMessageBus();
+
+		LiferayComponent component = context.getComponent(
+			"liferay", LiferayComponent.class);
+
+		component.setMessageBus(_messageBus);
+
 		return new RouteBuilder() {
 
 			public void configure() {
-				from("liferay://foo").to("liferay://bar").to("mock:result");
+				from("liferay:destination").to("liferay://bar").to(
+					"mock:result");
 			}
 
 		};
 	}
+
+	private MessageBus _messageBus;
 
 }

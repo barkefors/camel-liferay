@@ -14,6 +14,8 @@
 
 package com.liferay.mobile;
 
+import com.liferay.portal.kernel.messaging.MessageBus;
+
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
@@ -24,11 +26,22 @@ import org.apache.camel.impl.DefaultComponent;
  */
 public class LiferayComponent extends DefaultComponent {
 
+	public MessageBus getMessageBus() {
+		return _messageBus;
+	}
+
+	public void setMessageBus(MessageBus messageBus) {
+		_messageBus = messageBus;
+	}
+
+	public MessageBus _messageBus;
+
+	@Override
 	protected Endpoint createEndpoint(
 			String uri, String remaining, Map<String, Object> parameters)
 		throws Exception {
 
-		Endpoint endpoint = new LiferayEndpoint(uri, this);
+		Endpoint endpoint = new LiferayEndpoint(uri, this, remaining);
 		setProperties(endpoint, parameters);
 
 		return endpoint;
