@@ -32,13 +32,13 @@ dependencies {
 	formatter group: 'dom4j', name: 'dom4j', version: '1.6.1'
 	formatter group: 'org.apache.ant', name: 'ant', version: '1.8.2'
 
+	testCompile group: 'log4j', name: 'log4j', version:'1.2.16'
 	testCompile group: 'org.apache.camel', name: 'camel-test', version:'2.9.0'
 	testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
-	testCompile group: 'log4j', name: 'log4j', version:'1.2.16'
 }
 
 task format(type: JavaExec) {
 	main = 'com.liferay.portal.tools.sourceformatter.SourceFormatter'
 	classpath = configurations.formatter
-	workingDir = 'src/main/java'
+	workingDir = 'src'
 }
