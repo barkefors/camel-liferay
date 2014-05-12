@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.messaging.DefaultMessageBus;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -36,13 +37,15 @@ public class LiferayComponentTest extends CamelTestSupport {
 
 		Message message = new Message();
 		message.setPayload("payload");
-
 		_messageBus.sendMessage("destination", message);
+
 		assertMockEndpointsSatisfied();
 	}
 
 	@Override
-	protected RouteBuilder createRouteBuilder() throws Exception {
+	protected CamelContext createCamelContext() throws Exception {
+		CamelContext context = super.createCamelContext();
+
 		_messageBus = new DefaultMessageBus();
 
 		LiferayComponent component = context.getComponent(
@@ -50,6 +53,11 @@ public class LiferayComponentTest extends CamelTestSupport {
 
 		component.setMessageBus(_messageBus);
 
+		return context;
+	}
+
+	@Override
+	protected RouteBuilder createRouteBuilder() throws Exception {
 		return new RouteBuilder() {
 
 			public void configure() {

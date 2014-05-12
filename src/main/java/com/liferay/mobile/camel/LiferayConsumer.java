@@ -65,20 +65,18 @@ public class LiferayConsumer extends DefaultConsumer
 		super.doStart();
 
 		LiferayEndpoint endpoint = getEndpoint();
-
-		String destination = endpoint.getDestination();
+		String name = endpoint.getDestination();
 		MessageBus messageBus = endpoint.getMessageBus();
 
-		if (!messageBus.hasDestination(destination)) {
-			SynchronousDestination synchronousDestination =
-				new SynchronousDestination();
+		if (!messageBus.hasDestination(name)) {
+			SynchronousDestination destination = new SynchronousDestination();
 
-			synchronousDestination.setName(destination);
+			destination.setName(name);
 
-			messageBus.addDestination(synchronousDestination);
+			messageBus.addDestination(destination);
 		}
 
-		messageBus.registerMessageListener(destination, this);
+		messageBus.registerMessageListener(name, this);
 	}
 
 	private final Logger _log = LoggerFactory.getLogger(LiferayConsumer.class);
