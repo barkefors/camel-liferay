@@ -26,6 +26,13 @@ import org.apache.camel.impl.DefaultComponent;
  */
 public class LiferayComponent extends DefaultComponent {
 
+	public LiferayComponent() {
+	}
+
+	public LiferayComponent(MessageBus messageBus) {
+		_messageBus = messageBus;
+	}
+
 	public MessageBus getMessageBus() {
 		return _messageBus;
 	}
@@ -33,8 +40,6 @@ public class LiferayComponent extends DefaultComponent {
 	public void setMessageBus(MessageBus messageBus) {
 		_messageBus = messageBus;
 	}
-
-	public MessageBus _messageBus;
 
 	@Override
 	protected Endpoint createEndpoint(
@@ -46,5 +51,7 @@ public class LiferayComponent extends DefaultComponent {
 
 		return endpoint;
 	}
+
+	private MessageBus _messageBus;
 
 }

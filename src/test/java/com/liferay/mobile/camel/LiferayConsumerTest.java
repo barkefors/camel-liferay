@@ -28,10 +28,10 @@ import org.junit.Test;
 /**
  * @author Bruno Farache
  */
-public class LiferayComponentTest extends CamelTestSupport {
+public class LiferayConsumerTest extends CamelTestSupport {
 
 	@Test
-	public void sendPayload() throws Exception {
+	public void test() throws Exception {
 		MockEndpoint mock = getMockEndpoint("mock:result");
 		mock.expectedMinimumMessageCount(1);
 
@@ -61,8 +61,7 @@ public class LiferayComponentTest extends CamelTestSupport {
 		return new RouteBuilder() {
 
 			public void configure() {
-				from("liferay:destination").to("liferay://bar").to(
-					"mock:result");
+				from("liferay:destination").to("mock:result");
 			}
 
 		};
