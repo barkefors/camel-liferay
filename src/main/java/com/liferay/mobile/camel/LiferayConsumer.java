@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -65,18 +64,12 @@ public class LiferayConsumer extends DefaultConsumer
 		super.doStart();
 
 		LiferayEndpoint endpoint = getEndpoint();
-		String name = endpoint.getDestination();
 		MessageBus messageBus = endpoint.getMessageBus();
+		String destinationName = endpoint.getDestinationName();
 
-		if (!messageBus.hasDestination(name)) {
-			SynchronousDestination destination = new SynchronousDestination();
+		endpoint.addDefaultDestination();
 
-			destination.setName(name);
-
-			messageBus.addDestination(destination);
-		}
-
-		messageBus.registerMessageListener(name, this);
+		messageBus.registerMessageListener(destinationName, this);
 	}
 
 	private final Logger _log = LoggerFactory.getLogger(LiferayConsumer.class);

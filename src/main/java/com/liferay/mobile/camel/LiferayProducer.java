@@ -14,6 +14,9 @@
 
 package com.liferay.mobile.camel;
 
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBus;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 
@@ -29,10 +32,27 @@ public class LiferayProducer extends DefaultProducer {
 		super(endpoint);
 	}
 
+	public LiferayEndpoint getEndpoint() {
+		return (LiferayEndpoint)super.getEndpoint();
+	}
+
 	public void process(Exchange exchange) throws Exception {
+		Object payload = exchange.getIn().getBody();
+
 		if (_log.isDebugEnabled()) {
-			_log.debug("LiferayProducer.process " + exchange.getIn().getBody());
+			_log.debug("LiferayProducer.process " + payload);
 		}
+
+		LiferayEndpoint endpoint = getEndpoint();
+		MessageBus messageBus = endpoint.getMessageBus();
+		String destinationName = endpoint.getDestinationName();
+
+		endpoint.addDefaultDestination();
+
+		Message message = new Message();
+		message.setPayload(payload);
+
+		messageBus.sendMessage(destinationName, message);
 	}
 
 	private final Logger _log = LoggerFactory.getLogger(LiferayProducer.class);

@@ -15,6 +15,7 @@
 package com.liferay.mobile.camel;
 
 import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.SynchronousDestination;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -34,11 +35,11 @@ public class LiferayEndpoint extends DefaultEndpoint {
 	}
 
 	public LiferayEndpoint(
-		String uri, LiferayComponent component, String destination) {
+		String uri, LiferayComponent component, String destinationName) {
 
 		super(uri, component);
 
-		_destination = destination;
+		_destinationName = destinationName;
 	}
 
 	@Override
@@ -51,8 +52,8 @@ public class LiferayEndpoint extends DefaultEndpoint {
 		return new LiferayProducer(this);
 	}
 
-	public String getDestination() {
-		return _destination;
+	public String getDestinationName() {
+		return _destinationName;
 	}
 
 	public MessageBus getMessageBus() {
@@ -64,6 +65,19 @@ public class LiferayEndpoint extends DefaultEndpoint {
 		return true;
 	}
 
-	private String _destination;
+	protected void addDefaultDestination() {
+		MessageBus messageBus = getMessageBus();
+		String destinationName = getDestinationName();
+
+		if (messageBus.hasDestination(destinationName)) {
+			return;
+		}
+
+		SynchronousDestination destination = new SynchronousDestination();
+		destination.setName(destinationName);
+		messageBus.addDestination(destination);
+	}
+
+	private String _destinationName;
 
 }

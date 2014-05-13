@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.camel;
 
-import com.liferay.portal.kernel.messaging.Message;
-
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 
@@ -24,16 +22,14 @@ import org.junit.Test;
 /**
  * @author Bruno Farache
  */
-public class LiferayConsumerTest extends BaseTest {
+public class LiferayProducerTest extends BaseTest {
 
 	@Test
 	public void test() throws Exception {
 		MockEndpoint mock = getMockEndpoint("mock:result");
 		mock.expectedMinimumMessageCount(1);
 
-		Message message = new Message();
-		message.setPayload("payload");
-		messageBus.sendMessage("destination", message);
+		template.sendBody("direct:start", "payload");
 
 		assertMockEndpointsSatisfied();
 	}
@@ -43,7 +39,8 @@ public class LiferayConsumerTest extends BaseTest {
 		return new RouteBuilder() {
 
 			public void configure() {
-				from("liferay:destination").to("mock:result");
+				from("direct:start").to("liferay:destination").to(
+					"mock:result");
 			}
 
 		};
