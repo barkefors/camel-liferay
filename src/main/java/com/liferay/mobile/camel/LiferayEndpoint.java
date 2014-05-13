@@ -62,7 +62,7 @@ public class LiferayEndpoint extends DefaultEndpoint {
 
 	@Override
 	public boolean isSingleton() {
-		return true;
+		return false;
 	}
 
 	protected void addDefaultDestination() {
