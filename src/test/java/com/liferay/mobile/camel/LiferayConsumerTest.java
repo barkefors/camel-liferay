@@ -43,7 +43,7 @@ public class LiferayConsumerTest extends BaseTest {
 		return new RouteBuilder() {
 
 			public void configure() {
-				from("liferay:destination").to("mock:result");
+				from("liferay:" + destinationName).to("mock:result");
 			}
 
 		};

@@ -39,7 +39,7 @@ public class LiferayProducerTest extends BaseTest {
 		return new RouteBuilder() {
 
 			public void configure() {
-				from("direct:start").to("liferay:destination").to(
+				from("direct:start").to("liferay:" + destinationName).to(
 					"mock:result");
 			}
 

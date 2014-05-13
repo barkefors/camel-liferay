@@ -67,8 +67,6 @@ public class LiferayConsumer extends DefaultConsumer
 		MessageBus messageBus = endpoint.getMessageBus();
 		String destinationName = endpoint.getDestinationName();
 
-		endpoint.addDefaultDestination();
-
 		messageBus.registerMessageListener(destinationName, this);
 	}
 

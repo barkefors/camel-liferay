@@ -47,8 +47,6 @@ public class LiferayProducer extends DefaultProducer {
 		MessageBus messageBus = endpoint.getMessageBus();
 		String destinationName = endpoint.getDestinationName();
 
-		endpoint.addDefaultDestination();
-
 		Message message = new Message();
 		message.setPayload(payload);
 

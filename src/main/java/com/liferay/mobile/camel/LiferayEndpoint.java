@@ -15,7 +15,6 @@
 package com.liferay.mobile.camel;
 
 import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -63,19 +62,6 @@ public class LiferayEndpoint extends DefaultEndpoint {
 	@Override
 	public boolean isSingleton() {
 		return false;
-	}
-
-	protected void addDefaultDestination() {
-		MessageBus messageBus = getMessageBus();
-		String destinationName = getDestinationName();
-
-		if (messageBus.hasDestination(destinationName)) {
-			return;
-		}
-
-		SynchronousDestination destination = new SynchronousDestination();
-		destination.setName(destinationName);
-		messageBus.addDestination(destination);
 	}
 
 	private String _destinationName;

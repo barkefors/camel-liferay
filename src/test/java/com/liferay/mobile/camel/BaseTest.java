@@ -16,6 +16,7 @@ package com.liferay.mobile.camel;
 
 import com.liferay.portal.kernel.messaging.DefaultMessageBus;
 import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.SynchronousDestination;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.test.junit4.CamelTestSupport;
@@ -25,11 +26,22 @@ import org.apache.camel.test.junit4.CamelTestSupport;
  */
 public abstract class BaseTest extends CamelTestSupport {
 
+	protected void addDestination() {
+		if (messageBus.hasDestination(destinationName)) {
+			return;
+		}
+
+		SynchronousDestination destination = new SynchronousDestination();
+		destination.setName(destinationName);
+		messageBus.addDestination(destination);
+	}
+
 	@Override
 	protected CamelContext createCamelContext() throws Exception {
 		CamelContext context = super.createCamelContext();
 
 		messageBus = new DefaultMessageBus();
+		addDestination();
 
 		LiferayComponent component = context.getComponent(
 			"liferay", LiferayComponent.class);
@@ -39,6 +51,7 @@ public abstract class BaseTest extends CamelTestSupport {
 		return context;
 	}
 
+	protected String destinationName = "destination";
 	protected MessageBus messageBus;
 
 }
