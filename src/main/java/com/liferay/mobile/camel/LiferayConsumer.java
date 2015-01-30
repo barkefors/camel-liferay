@@ -50,6 +50,7 @@ public class LiferayConsumer extends DefaultConsumer
 		}
 
 		exchange.getIn().setBody(payload);
+		exchange.getIn().setHeader("liferay-ResponseId", message.getResponseId());
 
 		try {
 			getProcessor().process(exchange);

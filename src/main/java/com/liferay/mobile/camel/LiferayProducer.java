@@ -50,6 +50,11 @@ public class LiferayProducer extends DefaultProducer {
 		Message message = new Message();
 		message.setPayload(payload);
 
+		String responseId = (String) exchange.getIn().getHeader("liferay-ResponseId");
+		if (responseId != null) {
+			message.setResponseId(responseId);
+		}
+
 		messageBus.sendMessage(destinationName, message);
 	}
 

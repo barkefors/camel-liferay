@@ -1,8 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'osgi'
 
 group = 'com.liferay.mobile'
-version = '1.0-SNAPSHOT'
+version = '1.1-SNAPSHOT'
 description = "Liferay Camel Component"
 
 sourceCompatibility = 1.6
@@ -36,6 +37,14 @@ dependencies {
 	testCompile group: 'log4j', name: 'log4j', version:'1.2.16'
 	testCompile group: 'org.apache.camel', name: 'camel-test', version:'2.9.0'
 	testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version:'1.6.1'
+}
+
+jar {
+    manifest {
+        instruction 'Export-Package', 'com.liferay.mobile.camel'
+        instruction 'Bundle-Vendor', 'Liferay Inc.'
+        instruction 'Export-Service', 'org.apache.camel.spi.ComponentResolver;component=liferay'
+    }
 }
 
 task format(type: JavaExec) {
